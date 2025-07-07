@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const{v4: uuidv4} = require('uuid');
 
 const walletSchema = new mongoose.Schema({
-    _id: {type: String, default:uuidv4},
-    user_id: {type: String, required: true},
+    user_id: {type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: true},
+    wallet_id: {type: String, unique: true},
     balance: {type: Number, default: 0}
 },
     {timestamps: true});
