@@ -1,15 +1,18 @@
 require('dotenv').config();
 const express = require('express');
+const connectDB = require('./config/db');
 const mongoose = require('mongoose');
+
+const walletRoutes = require('./routes/wallet');
 
 const app = express();
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI)
-    .then(()=> console.log('mongoDB connected'))
-    .catch((err) => console.log('MongoDB connection error:',err));
+connectDB().then(() => {
+    app.use('/api/wallet', walletRoutes)
+    app.get('/', (req, res) => res.send('Payment Gateway Backend (mongoDB) is running'));
+    app.listen(process.env.PORT, () => console.log(`Server is running on port ${process.env.PORT}`));
+})
 
-app.get('/', (req, res) => res.send('Payment Gateway Backend (mongoDB) is running'));
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
-});
+
+
